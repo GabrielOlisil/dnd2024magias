@@ -44,6 +44,7 @@ useHead({
     }
   ],
 
+
   htmlAttrs: { lang: 'pt-BR' }
 })
 
