@@ -1,0 +1,126 @@
+[
+    {
+        "id": "detect_magic",
+        "nome": "Detect Magic",
+        "nivel": 1,
+        "escola": "divination",
+        "card_size": "half",
+        "descricao": "Você detecta a presença de magia a até 9 metros. Enquanto a magia durar, pode usar sua ação para perceber a aura mágica de criaturas e objetos visíveis.",
+        "tempo_conjuracao": "action",
+        "alcance": "self",
+        "duracao": "10_minutes",
+        "ritual": true,
+        "concentracao": true,
+        "componentes": {
+            "verbal": true,
+            "somatic": true,
+            "material": ""
+        }
+    },
+    {
+        "id": "mage_hand",
+        "nome": "Mage Hand",
+        "nivel": 0,
+        "card_size": "half",
+        "escola": "conjuration",
+        "descricao": "Uma mão espectral aparece dentro do alcance e pode manipular objetos simples à distância.",
+        "tempo_conjuracao": "action",
+        "alcance": "30_feet",
+        "duracao": "1_minute",
+        "ritual": false,
+        "concentracao": false,
+        "componentes": {
+            "verbal": true,
+            "somatic": true,
+            "material": ""
+        }
+    },
+    {
+        "id": "fireball",
+        "nome": "Fireball",
+        "nivel": 3,
+        "card_size": "half",
+        "escola": "evocation",
+        "descricao": "Uma explosão de fogo irrompe em um ponto escolhido, causando dano de fogo em uma área.",
+        "tempo_conjuracao": "action",
+        "alcance": "150_feet",
+        "duracao": "instantaneous",
+        "ritual": false,
+        "concentracao": false,
+        "componentes": {
+            "verbal": true,
+            "somatic": true,
+            "material": "uma pequena bola de guano de morcego e enxofre"
+        }
+    },
+    {
+        "id": "healing_word",
+        "nome": "Healing Word",
+        "nivel": 1,
+        "card_size": "half",
+        "escola": "abjuration",
+        "descricao": "Uma criatura à sua escolha recupera pontos de vida por meio de palavras de poder restaurador.",
+        "tempo_conjuracao": "bonus_action",
+        "alcance": "60_feet",
+        "duracao": "instantaneous",
+        "ritual": false,
+        "concentracao": false,
+        "componentes": {
+            "verbal": true,
+            "somatic": false,
+            "material": ""
+        }
+    },
+    {
+        "id": "aliado_extraplanar",
+        "nome": "Aliado Extraplanar",
+        "nivel": 6,
+        "escola": "evocation",
+        "alcance": "60_feet",
+        "tempo_conjuracao": "10_minutes",
+        "duracao": "instantaneous",
+        "componentes": {
+            "verbal": true,
+            "somatic": true,
+            "material": ""
+        },
+        "card_size": "full",
+        "descricao": "Você implora pela ajuda de uma entidade sobrenatural. Você deve conhecer o ser: um deus, um príncipe demônio ou algum outro ser de poder cósmico. Essa entidade envia um Celestial, um Elemental ou um Ínfero leal a ela para ajudá-lo, fazendo com que a criatura apareça em um espaço desocupado no alcance da magia. Se você souber o nome de uma criatura específica, você pode proferir esse nome quando conjurar a magia para solicitar essa criatura, embora você possa obter uma criatura diferente de qualquer modo (à escolha do Mestre).Quando a criatura aparece, ela não é obrigada a comportar-se de uma maneira específica. Você pode pedir que ela realize um serviço em troca de pagamento, mas ela não é obrigada a fazê-lo. A tarefa solicitada pode variar de simples (nos levar voando através do abismo ou nos ajudar a lutar em uma batalha) a complexa (espionar nossos inimigos ou nos proteger durante nossa incursão na masmorra). Você deve ser capaz de se comunicar com a criatura para negociar pelos serviços dela.O pagamento pode assumir várias formas. Um Celestial pode exigir uma doação considerável de ouro ou itens mágicos para um templo aliado, enquanto um Ínfero pode exigir um sacrifício vivo ou um presente na forma de um tesouro. Algumas criaturas podem trocar o serviço por uma missão realizada por você.Uma tarefa que pode ser medida em minutos requer um pagamento no valor de 100 PO por minuto. Uma tarefa medida em horas requer 1.000 PO por hora. Já uma tarefa medida em dias (até 10 dias) requer 10.000 PO por dia. O Mestre pode ajustar esses pagamentos com base nas circunstâncias em que você conjurou a magia. Se a tarefa estiver alinhada com os interesses da criatura, o pagamento pode ser reduzido pela metade ou até mesmo dispensado. Tarefas não perigosas normalmente exigem apenas metade do pagamento sugerido, enquanto tarefas especialmente perigosas podem demandar um pagamento maior. Criaturas raramente aceitam tarefas que parecem suicidas.Depois que a criatura conclui a tarefa, ou quando a duração combinada do serviço acaba, a criatura retorna ao seu plano de origem após se reportar a você, se possível. Se você não conseguir chegar a um acordo sobre um preço pelo serviço da criatura, a criatura retorna imediatamente ao seu plano de origem."
+    },
+    {
+        "id": "vicious_mockery",
+        "nome": "Vicious Mockery",
+        "nivel": 0,
+        "card_size": "half",
+        "escola": "enchantment",
+        "descricao": "Você profere uma série de insultos mágicos que causam dano psíquico e atrapalham o próximo ataque do alvo.",
+        "tempo_conjuracao": "action",
+        "alcance": "60_feet",
+        "duracao": "instantaneous",
+        "ritual": false,
+        "concentracao": false,
+        "componentes": {
+            "verbal": true,
+            "somatic": false,
+            "material": ""
+        }
+    },
+    {
+        "id": "hex",
+        "nome": "Hex",
+        "nivel": 1,
+        "escola": "enchantment",
+        "descricao": "Você amaldiçoa uma criatura, causando dano adicional sempre que a atingir e prejudicando uma habilidade escolhida.",
+        "card_size": "half",
+        "tempo_conjuracao": "bonus_action",
+        "alcance": "90_feet",
+        "duracao": "1_hour",
+        "ritual": false,
+        "concentracao": true,
+        "componentes": {
+            "verbal": true,
+            "somatic": true,
+            "material": "o olho petrificado de um tritão"
+        }
+    }
+]

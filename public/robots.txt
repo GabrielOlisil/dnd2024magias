@@ -1,2 +1,4 @@
-User-Agent: *
-Disallow:
+User-agent: *
+Allow: /
+
+Sitemap: https://gabrielolisil.github.io/dnd2024magias/sitemap.xml
