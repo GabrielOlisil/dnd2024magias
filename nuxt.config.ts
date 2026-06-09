@@ -26,7 +26,7 @@ export default defineNuxtConfig({
           rel: 'canonical',
           href: 'https://gabrielolisil.github.io/dnd2024magias/'
         },
-        { rel: 'icon', type: 'image/x-icon', href: 'dnd2024magias/favicon.png' }
+        { rel: 'icon', type: 'image/x-icon', href: 'favicon.png' }
       ]
     }
   }
