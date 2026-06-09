@@ -1,15 +1,12 @@
 <script setup>
-import { computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import spells from './data/magias.json'
 import SpellCard from './components/SpellCard.vue'
 
 useHead({
   title: 'Magias D&D 2024',
   meta: [
-    {
-      name: 'description',
-      content: 'Consulte magias do Dungeons & Dragons 2024 separadas por nível.'
-    },
+    { name: 'description', content: 'Consulte magias do Dungeons & Dragons 2024 separadas por nível.' },
     {
       name: 'keywords',
       content:
@@ -46,14 +43,50 @@ useHead({
         'Explore magias do D&D 2024 por nível, escola e componentes.'
     }
   ],
-  htmlAttrs: {
-    lang: 'pt-BR'
-  }
+
+  htmlAttrs: { lang: 'pt-BR' }
 })
 
+const known = ref(new Set())
+const onlyShowKnown = ref(false)
 const selectedClass = ref('all')
 
-// Lista de classes disponíveis para o filtro (mapeadas para exibição amigável)
+const itemsPerPage = 20
+const displayLimit = ref(itemsPerPage)
+
+watch([selectedClass, onlyShowKnown], () => {
+  displayLimit.value = itemsPerPage
+  window.scrollTo({ top: 0 })
+})
+
+function handleScroll() {
+  const scrollHeight = document.documentElement.scrollHeight
+  const scrollTop = document.documentElement.scrollTop
+  const clientHeight = document.documentElement.clientHeight
+
+  if (scrollHeight - scrollTop - clientHeight < 300) {
+    displayLimit.value += itemsPerPage
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
+
+function toggleKnown(spellId) {
+  const newSet = new Set(known.value)
+  if (newSet.has(spellId)) {
+    newSet.delete(spellId)
+  } else {
+    newSet.add(spellId)
+  }
+  known.value = newSet
+}
+
 const classesOptions = [
   { title: 'Todas as Classes', value: 'all' },
   { title: 'Bardo', value: 'bard' },
@@ -66,25 +99,26 @@ const classesOptions = [
   { title: 'Patrulheiro', value: 'ranger' }
 ]
 
-
-
 const spellsByLevel = computed(() => {
   const groups = {}
+  let renderedCount = 0
 
-  // 1. Filtragem por classe
-  const filteredSpells = spells.filter(spell => {
-    if (selectedClass.value === 'all') return true
-    return spell.classes.includes(selectedClass.value)
+  const filtered = spells.filter(spell => {
+    const matchesClass = selectedClass.value === 'all' || spell.classes.includes(selectedClass.value)
+    const matchesKnown = !onlyShowKnown.value || known.value.has(spell.id)
+    return matchesClass && matchesKnown
   })
 
-  // 2. Agrupamento por nível
-  filteredSpells.forEach(spell => {
+  for (const spell of filtered) {
+    if (renderedCount >= displayLimit.value) break
+
     const level = spell.level
     if (!groups[level]) {
       groups[level] = []
     }
     groups[level].push(spell)
-  })
+    renderedCount++
+  }
 
   return groups
 })
@@ -93,17 +127,13 @@ const hasSpells = computed(() => Object.keys(spellsByLevel.value).length > 0)
 
 function getCardLayout(spell) {
   const size = spell.description.length + (spell.cantripUpgrade?.length || 0)
-  return size > 450 ? 'full' : 'half'
+  return size > 700 ? 'full' : 'half'
 }
 
-// Helper para definir o título visual de cada nível
 function getLevelTitle(level) {
   const lvl = Number(level)
-  if (lvl === 0) return 'Truques'
-  return `${lvl}º Nível`
+  return lvl === 0 ? 'Truques' : `${lvl}º Nível`
 }
-
-
 </script>
 
 <template>
@@ -112,8 +142,7 @@ function getLevelTitle(level) {
       <v-container fluid class="pa-6 max-width-container">
         <h1 class="text-h3 my-6 font-weight-bold text-center">Compêndio de Magias</h1>
 
-        <!-- Barra de Filtros -->
-        <v-row justify="center" class="mb-6">
+        <v-row justify="center" class="mb-4">
           <v-col cols="12" sm="6" md="4">
             <v-select v-model="selectedClass" :items="classesOptions" item-title="title" item-value="value"
               label="Filtrar por Classe" variant="outlined" prepend-inner-icon="mdi-shield-account"
@@ -121,21 +150,24 @@ function getLevelTitle(level) {
           </v-col>
         </v-row>
 
+        <v-row justify="center" class="mb-6">
+          <v-col cols="12" sm="6" md="4" class="d-flex justify-center">
+            <v-switch label="Mostrar apenas conhecidas" v-model="onlyShowKnown" inset color="orange-darken-2"
+              hide-details></v-switch>
+          </v-col>
+        </v-row>
 
-        <!-- Loop pelas seções de níveis (ex: 0, 1, 2...) -->
+        <v-alert v-if="!hasSpells" type="info" variant="tonal"
+          text="Nenhuma magia encontrada para os filtros selecionados." class="mt-6"></v-alert>
+
         <section v-for="(group, level) in spellsByLevel" :key="level" class="level-section mb-10">
-          <!-- Título da Seção Dinâmico -->
+          <v-alert :title="getLevelTitle(level)"
+            :text="`${group.length} ${group.length === 1 ? 'magia carregada' : 'magias carregadas'}`" variant="tonal"
+            color="primary" class="mb-6"></v-alert>
 
-
-          <v-alert color="teal-lighten-2" :text="`${group.length}  ${group.length === 1 ? 'magia' : 'magias'}`"
-            :title="getLevelTitle(level)"></v-alert>
-
-          <v-divider class="mb-6"></v-divider>
-
-          <!-- Grid Masonry específico deste nível -->
           <div class="masonry-grid">
-            <div v-for="spell in group" :key="spell.name" :class="['masonry-item', getCardLayout(spell)]">
-              <SpellCard :spell="spell" :layout="getCardLayout(spell)" />
+            <div v-for="spell in group" :key="spell.id" :class="['masonry-item', getCardLayout(spell)]">
+              <SpellCard :spell="spell" :layout="getCardLayout(spell)" @toggleKnownSpell="toggleKnown" />
             </div>
           </div>
         </section>
@@ -144,13 +176,9 @@ function getLevelTitle(level) {
 
     <v-footer border class="text-center d-flex flex-column pa-4 bg-surface">
       <div class="text-body-2 text-medium-emphasis max-width-container w-100">
-        <p class="mb-2 font-weight-bold">
-          Compêndio de Magias D&D 2024 &copy; {{ new Date().getFullYear() }}
-        </p>
+        <p class="mb-2 font-weight-bold">Compêndio de Magias D&D 2024 &copy; {{ new Date().getFullYear() }}</p>
         <p class="text-caption text-disabled px-4 lh-sm">
-          Este projeto utiliza material do System Reference Document 5.2 (SRD 5.2) por Wizards of the Coast LLC,
-          disponibilizado sob os termos da licença Creative Commons Attribution 4.0 International (CC-BY-4.0).
-          Desenvolvido estritamente para fins de estudo, consulta pessoal e portfólio de programação.
+          Este projeto utiliza material do System Reference Document 5.2 (SRD 5.2) por Wizards of the Coast LLC.
         </p>
       </div>
     </v-footer>
@@ -165,7 +193,6 @@ function getLevelTitle(level) {
 
 .level-section {
   scroll-margin-top: 20px;
-
 }
 
 .masonry-grid {

@@ -2,6 +2,8 @@
 import MarkdownIt from 'markdown-it'
 import markdownItMultimdTable from 'markdown-it-multimd-table'
 
+import escolas from '~/data/escolas.json'
+
 const md = new MarkdownIt({
   breaks: true,
   html: true
@@ -34,6 +36,14 @@ function formatAction(action) {
   }
   return types[action] || action
 }
+
+const emit = defineEmits(['toggleKnownSpell'])
+
+
+function onToggleKnown(spellId) {
+  emit('toggleKnownSpell', spellId)
+}
+
 </script>
 
 <template>
@@ -46,8 +56,10 @@ function formatAction(action) {
       <v-card-subtitle class="text-capitalize pt-1">
         {{ spell.level === 0 ? 'Truque' : `${spell.level}º Nível` }}
         •
-        {{ spell.school }}
+        {{ escolas[spell.school] }}
       </v-card-subtitle>
+
+      <v-switch label="Conhece" inset color="red-darken-2" @click="onToggleKnown(spell.id)"></v-switch>
     </v-card-item>
 
     <v-card-text>
@@ -62,7 +74,7 @@ function formatAction(action) {
       <v-divider class="mb-4"></v-divider>
 
       <!-- Detalhes Mecânicos -->
-      <v-row dense class="text-caption">
+      <v-row density="comfortable" class="text-caption">
         <v-col cols="6" sm="3">
           <strong>Conjuração:</strong> <br>
           {{ formatAction(spell.actionType) }} {{ spell.castingTime ? `(${spell.castingTime})` : '' }}
@@ -78,10 +90,8 @@ function formatAction(action) {
           {{ spell.duration }}
         </v-col>
 
-        <v-col cols="6" sm="3">
-          <strong>Classes:</strong> <br>
-          <span class="text-capitalize">{{ spell.classes.join(', ') }}</span>
-        </v-col>
+
+
       </v-row>
 
       <!-- Componentes -->
