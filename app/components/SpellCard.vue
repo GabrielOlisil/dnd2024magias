@@ -1,15 +1,5 @@
 <script setup>
-import MarkdownIt from 'markdown-it'
-import markdownItMultimdTable from 'markdown-it-multimd-table'
-
 import escolas from '~/data/escolas.json'
-
-const md = new MarkdownIt({
-  breaks: true,
-  html: true
-})
-
-md.use(markdownItMultimdTable)
 
 defineProps({
   spell: {
@@ -21,10 +11,6 @@ defineProps({
     default: 'half' // 'half' ou 'full'
   }
 })
-
-function renderMarkdown(text) {
-  return md.render(text || '')
-}
 
 function formatAction(action) {
   const types = {
@@ -39,11 +25,9 @@ function formatAction(action) {
 
 const emit = defineEmits(['toggleKnownSpell'])
 
-
 function onToggleKnown(spellId) {
   emit('toggleKnownSpell', spellId)
 }
-
 </script>
 
 <template>
@@ -56,45 +40,35 @@ function onToggleKnown(spellId) {
       <v-card-subtitle class="text-capitalize pt-1">
         {{ spell.level === 0 ? 'Truque' : `${spell.level}º Nível` }}
         •
-        {{ escolas[spell.school] }}
+        {{ escolas[spell.school] || spell.school }}
       </v-card-subtitle>
 
       <v-switch label="Conhece" inset color="red-darken-2" @click="onToggleKnown(spell.id)"></v-switch>
     </v-card-item>
 
     <v-card-text>
-      <!-- Se o card for 'full', a classe 'two-columns' divide a descrição interna em 2 partes -->
       <div :class="['spell-description text-body-2 mb-4', { 'two-columns': layout === 'full' }]"
-        v-html="renderMarkdown(spell.description)" />
-
-      <div v-if="spell.cantripUpgrade"
-        :class="['spell-description text-body-2 mb-4 text-amber-darken-3', { 'two-columns': layout === 'full' }]"
-        v-html="renderMarkdown(spell.cantripUpgrade)" />
+        v-html="spell.description" />
 
       <v-divider class="mb-4"></v-divider>
 
-      <!-- Detalhes Mecânicos -->
       <v-row density="comfortable" class="text-caption">
-        <v-col cols="6" sm="3">
+        <v-col cols="6" sm="4">
           <strong>Conjuração:</strong> <br>
           {{ formatAction(spell.actionType) }} {{ spell.castingTime ? `(${spell.castingTime})` : '' }}
         </v-col>
 
-        <v-col cols="6" sm="3">
+        <v-col cols="6" sm="4">
           <strong>Alcance:</strong> <br>
           {{ spell.range }}
         </v-col>
 
-        <v-col cols="6" sm="3">
+        <v-col cols="6" sm="4">
           <strong>Duração:</strong> <br>
           {{ spell.duration }}
         </v-col>
-
-
-
       </v-row>
 
-      <!-- Componentes -->
       <div class="mt-4">
         <span class="text-caption font-weight-bold">Componentes:</span>
         <div class="d-flex align-center flex-wrap gap-1 mt-1">
@@ -109,7 +83,6 @@ function onToggleKnown(spellId) {
         </div>
       </div>
 
-      <!-- Badges Extras -->
       <div v-if="spell.ritual || spell.concentration" class="d-flex gap-2 mt-4">
         <v-chip v-if="spell.ritual" color="blue" size="small" variant="flat" class="mr-2">
           Ritual
@@ -144,7 +117,7 @@ function onToggleKnown(spellId) {
   break-inside: avoid;
 }
 
-/* Tabelas Markdown */
+/* Tabelas injetadas no HTML interno */
 :deep(.spell-description) table {
   width: 100%;
   border-collapse: collapse;

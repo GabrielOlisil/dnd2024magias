@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import spells from './data/magias.json'
+import spells from './data/spells-ptbr.json'
 import SpellCard from './components/SpellCard.vue'
 
 useHead({
@@ -177,9 +177,19 @@ function getLevelTitle(level) {
 
     <v-footer border class="text-center d-flex flex-column pa-4 bg-surface">
       <div class="text-body-2 text-medium-emphasis max-width-container w-100">
-        <p class="mb-2 font-weight-bold">Compêndio de Magias D&D 2024 &copy; {{ new Date().getFullYear() }}</p>
+        <p class="mb-2 font-weight-bold">
+          Compêndio de Magias D&D 2024 &copy; {{ new Date().getFullYear() }}
+        </p>
         <p class="text-caption text-disabled px-4 lh-sm">
-          Este projeto utiliza material do System Reference Document 5.2 (SRD 5.2) por Wizards of the Coast LLC.
+          Este projeto utiliza material do System Reference Document 5.2 (SRD 5.2) por Wizards of the Coast LLC,
+          disponibilizado sob os termos da licença Creative Commons Attribution 4.0 International (CC-BY-4.0).
+        </p>
+        <p class="text-caption text-disabled px-4 lh-sm mt-1">
+          <strong>Créditos de Tradução:</strong> Nomes das magias e localização de termos técnicos baseados no compêndio
+          comunitário
+          <a href="https://github.com/decito/dnd5e-pt-br" target="_blank" rel="noopener"
+            class="text-grey-darken-1 decoration-underline">decito/dnd5e-pt-br</a>
+          e no grupo Heróis Anônimos.
         </p>
       </div>
     </v-footer>
