@@ -52,11 +52,12 @@ const known = ref(new Set())
 const onlyShowKnown = ref(false)
 const selectedClass = ref('all')
 
+const hasSpells = ref(true)
+
 
 const staticSpellsByLevel = (() => {
   const groups = {}
 
-  // Ordena por nível estritamente (Truque -> 1º -> 2º...)
   const sortedSpells = [...spells].sort((a, b) => Number(a.level) - Number(b.level))
 
   for (const spell of sortedSpells) {
@@ -67,10 +68,12 @@ const staticSpellsByLevel = (() => {
   return groups
 })()
 
-// 2. FUNÇÃO DE FILTRO RÁPIDA: Executada inline no v-show (alta performance)
 function isSpellVisible(spell) {
-  const matchesClass = selectedClass.value === 'all' || spell.classes.includes(selectedClass.value)
+  const matchesClass = selectedClass.value === 'all' || spell.classes.includes(selectedClass.value) || (onlyShowKnown.value == true && known.value.has(spell.id))
+
+
   const matchesKnown = !onlyShowKnown.value || known.value.has(spell.id)
+
   return matchesClass && matchesKnown
 }
 
@@ -105,6 +108,19 @@ function getLevelTitle(level) {
   const lvl = Number(level)
   return lvl === 0 ? 'Truques' : `${lvl}º Nível`
 }
+
+
+watch([onlyShowKnown, selectedClass], async ([newOnlyShowKnow, newSelectedClass], [oldOnlyShowKnown, oldSelectedClass]) => {
+  console.log("bunda")
+  if (newOnlyShowKnow == true && known.value.size == 0) {
+    hasSpells.value = false;
+    return;
+
+  }
+  hasSpells.value = true;
+
+})
+
 </script>
 
 <template>
@@ -114,7 +130,7 @@ function getLevelTitle(level) {
         <h1 class="text-h3 my-6 font-weight-bold text-center">Compêndio de Magias</h1>
 
         <p>
-          tradução feita por <a href="https://sites.google.com/view/heroisanonimos">Heróis Anônimos</a>
+          tradução feita por <a href="https://sites.google.com/view/heroisanonimos" target="_blank">Heróis Anônimos</a>
         </p>
 
         <v-row justify="center" class="mb-4">
@@ -136,7 +152,8 @@ function getLevelTitle(level) {
           text="Nenhuma magia encontrada para os filtros selecionados." class="mt-6"></v-alert>
 
         <section v-for="(group, level) in staticSpellsByLevel" :key="level" class="level-section mb-10">
-          <v-alert :title="getLevelTitle(level)" variant="tonal" color="primary" class="mb-6"></v-alert>
+          <v-alert v-if="hasSpells" :title="getLevelTitle(level)" variant="tonal" color="primary"
+            class="mb-6"></v-alert>
 
           <div class="masonry-grid">
             <div v-for="spell in group" :key="spell.id" v-show="isSpellVisible(spell)"
