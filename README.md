@@ -41,7 +41,6 @@ O design da interface utiliza uma abordagem inteligente baseada em **CSS Grid** 
 Este projeto foi construído respeitando o trabalho mecânico oficial e o esforço de tradução voluntária da comunidade:
 
 1. **Regras e Dados Originais:** *System Reference Document 5.2 (SRD 5.2)* da **Wizards of the Coast LLC**, disponibilizado sob a licença *Creative Commons Attribution 4.0 International (CC-BY-4.0)*.
-2. **Localização e Tradução:** * Mapeamento de ficheiros, pastas e termos técnicos adaptados a partir do repositório público [decito/dnd5e-pt-br](https://github.com/decito/dnd5e-pt-br) (módulo de tradução para Foundry VTT).
-   * Padronização de nomes de magias baseada na tradução comunitária do grupo *Heróis Anônimos*.
+2. **Localização e Tradução:** *Heróis Anônimos* https://sites.google.com/view/heroisanonimos.
 
 ---

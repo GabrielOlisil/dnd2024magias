@@ -1,10 +1,10 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import spells from './data/spells-ptbr.json'
+import spells from './data/spells.json'
 import SpellCard from './components/SpellCard.vue'
 
 useHead({
-  title: 'Magias D&D 2024',
+  title: 'Magias DnD 2024',
   meta: [
     { name: 'description', content: 'Consulte magias do Dungeons & Dragons 2024 separadas por nível.' },
     {
@@ -14,12 +14,12 @@ useHead({
     },
     {
       property: 'og:title',
-      content: 'Compêndio de Magias D&D 2024'
+      content: 'Magias DnD 2024'
     },
     {
       property: 'og:description',
       content:
-        'Referência rápida de magias do D&D 2024 com filtros, componentes, escolas e níveis.'
+        'Referência rápida de magias do DnD 2024 com filtros, componentes, escolas e níveis.'
     },
     {
       property: 'og:type',
@@ -27,7 +27,7 @@ useHead({
     },
     {
       property: 'og:site_name',
-      content: 'Compêndio de Magias D&D 2024'
+      content: 'Compêndio de Magias DnD 2024'
     },
     {
       name: 'twitter:card',
@@ -35,7 +35,7 @@ useHead({
     },
     {
       name: 'twitter:title',
-      content: 'Compêndio de Magias D&D 2024'
+      content: 'Magias DnD 2024'
     },
     {
       name: 'twitter:description',
@@ -52,31 +52,27 @@ const known = ref(new Set())
 const onlyShowKnown = ref(false)
 const selectedClass = ref('all')
 
-const itemsPerPage = 20
-const displayLimit = ref(itemsPerPage)
 
-watch([selectedClass, onlyShowKnown], () => {
-  displayLimit.value = itemsPerPage
-  window.scrollTo({ top: 0 })
-})
+const staticSpellsByLevel = (() => {
+  const groups = {}
 
-function handleScroll() {
-  const scrollHeight = document.documentElement.scrollHeight
-  const scrollTop = document.documentElement.scrollTop
-  const clientHeight = document.documentElement.clientHeight
+  // Ordena por nível estritamente (Truque -> 1º -> 2º...)
+  const sortedSpells = [...spells].sort((a, b) => Number(a.level) - Number(b.level))
 
-  if (scrollHeight - scrollTop - clientHeight < 300) {
-    displayLimit.value += itemsPerPage
+  for (const spell of sortedSpells) {
+    const level = spell.level
+    if (!groups[level]) groups[level] = []
+    groups[level].push(spell)
   }
+  return groups
+})()
+
+// 2. FUNÇÃO DE FILTRO RÁPIDA: Executada inline no v-show (alta performance)
+function isSpellVisible(spell) {
+  const matchesClass = selectedClass.value === 'all' || spell.classes.includes(selectedClass.value)
+  const matchesKnown = !onlyShowKnown.value || known.value.has(spell.id)
+  return matchesClass && matchesKnown
 }
-
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
-})
 
 function toggleKnown(spellId) {
   const newSet = new Set(known.value)
@@ -100,34 +96,8 @@ const classesOptions = [
   { title: 'Patrulheiro', value: 'ranger' }
 ]
 
-const spellsByLevel = computed(() => {
-  const groups = {}
-  let renderedCount = 0
-
-  const filtered = spells.filter(spell => {
-    const matchesClass = selectedClass.value === 'all' || spell.classes.includes(selectedClass.value)
-    const matchesKnown = !onlyShowKnown.value || known.value.has(spell.id)
-    return matchesClass && matchesKnown
-  })
-
-  for (const spell of filtered) {
-    if (renderedCount >= displayLimit.value) break
-
-    const level = spell.level
-    if (!groups[level]) {
-      groups[level] = []
-    }
-    groups[level].push(spell)
-    renderedCount++
-  }
-
-  return groups
-})
-
-const hasSpells = computed(() => Object.keys(spellsByLevel.value).length > 0)
-
 function getCardLayout(spell) {
-  const size = spell.description.length + (spell.cantripUpgrade?.length || 0)
+  const size = (spell.description?.length || 0) + (spell.cantripUpgrade?.length || 0)
   return size > 700 ? 'full' : 'half'
 }
 
@@ -142,6 +112,10 @@ function getLevelTitle(level) {
     <v-main>
       <v-container fluid class="pa-6 max-width-container">
         <h1 class="text-h3 my-6 font-weight-bold text-center">Compêndio de Magias</h1>
+
+        <p>
+          tradução feita por <a href="https://sites.google.com/view/heroisanonimos">Heróis Anônimos</a>
+        </p>
 
         <v-row justify="center" class="mb-4">
           <v-col cols="12" sm="6" md="4">
@@ -161,13 +135,12 @@ function getLevelTitle(level) {
         <v-alert v-if="!hasSpells" type="info" variant="tonal"
           text="Nenhuma magia encontrada para os filtros selecionados." class="mt-6"></v-alert>
 
-        <section v-for="(group, level) in spellsByLevel" :key="level" class="level-section mb-10">
-          <v-alert :title="getLevelTitle(level)"
-            :text="`${group.length} ${group.length === 1 ? 'magia carregada' : 'magias carregadas'}`" variant="tonal"
-            color="primary" class="mb-6"></v-alert>
+        <section v-for="(group, level) in staticSpellsByLevel" :key="level" class="level-section mb-10">
+          <v-alert :title="getLevelTitle(level)" variant="tonal" color="primary" class="mb-6"></v-alert>
 
           <div class="masonry-grid">
-            <div v-for="spell in group" :key="spell.id" :class="['masonry-item', getCardLayout(spell)]">
+            <div v-for="spell in group" :key="spell.id" v-show="isSpellVisible(spell)"
+              :class="['masonry-item', getCardLayout(spell)]">
               <SpellCard :spell="spell" :layout="getCardLayout(spell)" @toggleKnownSpell="toggleKnown" />
             </div>
           </div>
@@ -204,6 +177,8 @@ function getLevelTitle(level) {
 
 .level-section {
   scroll-margin-top: 20px;
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
 }
 
 .masonry-grid {
@@ -215,6 +190,7 @@ function getLevelTitle(level) {
 
 .masonry-item {
   width: 100%;
+  content-visibility: auto;
 }
 
 .masonry-item.half {
