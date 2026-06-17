@@ -1,5 +1,6 @@
 <script setup>
 import escolas from '~/data/escolas.json'
+import MarkdownIt from 'markdown-it'
 
 defineProps({
   spell: {
@@ -28,6 +29,13 @@ const emit = defineEmits(['toggleKnownSpell'])
 function onToggleKnown(spellId) {
   emit('toggleKnownSpell', spellId)
 }
+
+const md = new MarkdownIt({
+  html: true,
+  linkify: true,
+  breaks: true,
+  typographer: true
+})
 </script>
 
 <template>
@@ -47,8 +55,8 @@ function onToggleKnown(spellId) {
     </v-card-item>
 
     <v-card-text>
-      <div :class="['spell-description text-body-2 mb-4', { 'two-columns': layout === 'full' }]"
-        v-html="spell.description" />
+      <div :class="['spell-description text-body-2 mb-4', { 'two-columns': layout === 'full' }, 'markdown-body']"
+        v-html="md.render(spell.description)" />
 
       <v-divider class="mb-4"></v-divider>
 
@@ -97,6 +105,57 @@ function onToggleKnown(spellId) {
 </template>
 
 <style scoped>
+/* 3. ESTILIZAÇÃO DO MARKDOWN (Tabelas e Listas) */
+.markdown-body {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Espaçamento de parágrafos e listas */
+.markdown-body :deep(p) {
+  margin-bottom: 12px;
+}
+
+.markdown-body :deep(ul),
+.markdown-body :deep(ol) {
+  margin-bottom: 12px;
+  padding-left: 20px;
+}
+
+/* Estilização de Tabelas (padrão D&D) */
+.markdown-body :deep(table) {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 0.85rem;
+}
+
+.markdown-body :deep(th) {
+  background-color: rgba(var(--v-theme-primary), 0.1);
+  /* Usa a cor primária do Vuetify */
+  color: rgb(var(--v-theme-primary));
+  font-weight: bold;
+  text-align: left;
+  padding: 8px;
+  border-bottom: 2px solid rgb(var(--v-theme-primary));
+}
+
+.markdown-body :deep(td) {
+  padding: 6px 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+/* Linhas alternadas na tabela (Zebrado) */
+.markdown-body :deep(tr:nth-child(even)) {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Destaques em negrito (dados de dano, dados de jogada) */
+.markdown-body :deep(strong) {
+  color: black;
+  /* Laranja escuro para destacar no texto */
+}
+
 .v-card-spell {
   background-color: rgb(var(--v-theme-surface));
 }
