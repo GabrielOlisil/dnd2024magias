@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxtjs/sitemap": "^8.2.1",
     "markdown-it": "^14.2.0",
     "markdown-it-multimd-table": "^4.2.3",
     "nuxt": "^4.4.7",

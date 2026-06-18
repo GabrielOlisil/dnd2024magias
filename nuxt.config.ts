@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   ssr: true,
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['vuetify-nuxt-module'],
+  modules: ['vuetify-nuxt-module', '@nuxtjs/sitemap'],
   vuetify: {
     moduleOptions: {
       /* module specific options */
@@ -11,6 +11,13 @@ export default defineNuxtConfig({
     vuetifyOptions: {
       /* vuetify options */
     }
+  },
+  site: {
+    url: 'https://dndmagias.letsplayrpg.com',
+    name: 'Magias D&D 2024 em Português'
+  },
+  sitemap: {
+    zeroRuntime: true
   },
   app: {
     baseURL: '/',

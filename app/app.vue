@@ -4,9 +4,9 @@ import spells from './data/spells.json'
 import SpellCard from './components/SpellCard.vue'
 
 useHead({
-  title: 'Magias DnD 2024',
+  title: 'Magias D&D 2024 em Português | Compêndio SRD 5.2',
   meta: [
-    { name: 'description', content: 'Consulte magias do Dungeons & Dragons 2024 separadas por nível.' },
+    { name: 'description', content: 'Todas as magias de D&D 2024 em português. Consulte truques e magias dos níveis 1 ao 9 para Mago, Clérigo, Druida, Bardo, Bruxo, Feiticeiro, Patrulheiro e Paladino.' },
     {
       name: 'keywords',
       content:
@@ -127,7 +127,7 @@ watch([onlyShowKnown, selectedClass], async ([newOnlyShowKnow, newSelectedClass]
   <v-app>
     <v-main>
       <v-container fluid class="pa-6 max-width-container">
-        <h1 class="text-h3 my-6 font-weight-bold text-center">Compêndio de Magias</h1>
+        <h1 class="text-h3 my-6 font-weight-bold text-center">Magias D&D 2024 em Português</h1>
 
         <p>
           tradução feita por <a href="https://sites.google.com/view/heroisanonimos" target="_blank">Heróis Anônimos</a>

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://gabrielolisil.github.io/dnd2024magias/sitemap.xml
+Sitemap: https://dndmagias.letsplayrpg.com/sitemap.xml
