@@ -8,6 +8,10 @@ useHead({
   meta: [
     { name: 'description', content: 'Todas as magias de D&D 2024 em português. Consulte truques e magias dos níveis 1 ao 9 para Mago, Clérigo, Druida, Bardo, Bruxo, Feiticeiro, Patrulheiro e Paladino.' },
     {
+      name: 'robots',
+      content: 'noindex, nofollow'
+    },
+    {
       name: 'keywords',
       content:
         'D&D 2024, Dungeons and Dragons, magias, spells, spellbook, compêndio, SRD, wizard, cleric, bard, warlock, RPG'
