@@ -13,7 +13,7 @@ export default defineNuxtConfig({
     }
   },
   app: {
-    baseURL: '/dnd2024magias/',
+    baseURL: '/',
     head: {
       meta: [
         {
