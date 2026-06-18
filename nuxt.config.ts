@@ -13,7 +13,7 @@ export default defineNuxtConfig({
     }
   },
   site: {
-    url: 'https://dndmagias.letsplayrpg.com',
+    url: 'https://dndmagias.letsplaysrpg.com',
     name: 'Magias D&D 2024 em Português'
   },
   sitemap: {
@@ -31,7 +31,7 @@ export default defineNuxtConfig({
       link: [
         {
           rel: 'canonical',
-          href: 'https://gabrielolisil.github.io/dnd2024magias/'
+          href: 'https://dndmagias.letsplaysrpg.com'
         },
         { rel: 'icon', type: 'image/x-icon', href: 'favicon.png' }
       ]

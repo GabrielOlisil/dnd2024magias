@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://dndmagias.letsplayrpg.com/sitemap.xml
+Sitemap: https://dndmagias.letsplaysrpg.com/sitemap.xml
