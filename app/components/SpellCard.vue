@@ -142,6 +142,7 @@ const md = new MarkdownIt({
 .markdown-body :deep(strong) {
   margin-top: 20px;
   display: block;
+  font-size: 1.1rem;
 }
 
 .markdown-body :deep(ul),
@@ -176,11 +177,6 @@ const md = new MarkdownIt({
   background-color: rgba(0, 0, 0, 0.02);
 }
 
-/* Destaques em negrito (dados de dano, dados de jogada) */
-.markdown-body :deep(strong) {
-  color: black;
-  /* Laranja escuro para destacar no texto */
-}
 
 .v-card-spell {
   background-color: rgb(var(--v-theme-surface));
@@ -193,7 +189,7 @@ const md = new MarkdownIt({
 .two-columns {
   column-count: 2;
   column-gap: 24px;
-
+  min-height: 400px;
 }
 
 .two-columns :deep(table),
