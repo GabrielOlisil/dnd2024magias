@@ -71,9 +71,7 @@ const md = new MarkdownIt({
 
 
 
-          <v-switch
-label="Conhece" inset color="red-darken-2" :model-value="known"
-            @click="onToggleKnown(spell.id)"/>
+          <v-switch label="Conhece" inset color="red-darken-2" :model-value="known" @click="onToggleKnown(spell.id)" />
 
         </v-col>
       </v-row>
@@ -98,10 +96,9 @@ label="Conhece" inset color="red-darken-2" :model-value="known"
         </v-col>
       </v-row>
 
-      <v-divider class="my-4"/>
+      <v-divider class="my-4" />
 
-      <div
-:class="['spell-description text-body-2 mb-4', { 'two-columns': layout === 'full' }, 'markdown-body']"
+      <div :class="['spell-description text-body-2 mb-4', { 'two-columns': layout === 'full' }, 'markdown-body']"
         v-html="md.render(spell.description)" />
 
 
@@ -110,8 +107,7 @@ label="Conhece" inset color="red-darken-2" :model-value="known"
       <div class="mt-4">
         <span v-if="spell.components.length > 0" class="text-caption font-weight-bold">Componentes:</span>
         <div class="d-flex align-center flex-wrap gap-1 mt-1">
-          <v-chip
-v-for="component in spell.components" :key="component" size="x-small" variant="tonal"
+          <v-chip v-for="component in spell.components" :key="component" size="x-small" variant="tonal"
             class="mr-1 font-weight-bold">
             {{ component.toUpperCase() }}
           </v-chip>
@@ -127,9 +123,7 @@ v-for="component in spell.components" :key="component" size="x-small" variant="t
           Ritual
         </v-chip>
 
-        <v-chip v-if="spell.concentration" color="deep-purple-darken-1" size="small" variant="flat">
-          Concentração
-        </v-chip>
+
       </div>
     </v-card-text>
   </v-card>
