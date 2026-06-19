@@ -1,6 +1,8 @@
 <script setup>
-import escolas from '~/data/escolas.json'
-import MarkdownIt from 'markdown-it'
+import escolas from '~/data/escolas.json';
+import MarkdownIt from 'markdown-it';
+
+
 
 defineProps({
   spell: {
@@ -10,8 +12,12 @@ defineProps({
   layout: {
     type: String,
     default: 'half' // 'half' ou 'full'
+  },
+  known: {
+    type: Boolean,
+    default: false
   }
-})
+});
 
 function formatAction(action) {
   const types = {
@@ -20,14 +26,14 @@ function formatAction(action) {
     reaction: 'Reação',
     minute: 'Minuto(s)',
     hour: 'Hora(s)'
-  }
-  return types[action] || action
+  };
+  return types[action] || action;
 }
 
-const emit = defineEmits(['toggleKnownSpell'])
+const emit = defineEmits(['toggleKnownSpell']);
 
 function onToggleKnown(spellId) {
-  emit('toggleKnownSpell', spellId)
+  emit('toggleKnownSpell', spellId);
 }
 
 const md = new MarkdownIt({
@@ -35,30 +41,45 @@ const md = new MarkdownIt({
   linkify: true,
   breaks: true,
   typographer: true
-})
+});
+
+
 </script>
 
 <template>
-  <v-card variant="outlined" class="v-card-spell border">
+  <v-card variant="outlined" class="v-card-spell border-md">
     <v-card-item>
-      <v-card-title class="text-h5 font-weight-bold">
-        {{ spell.name }}
-      </v-card-title>
 
-      <v-card-subtitle class="text-capitalize pt-1">
-        {{ spell.level === 0 ? 'Truque' : `${spell.level}º Nível` }}
-        •
-        {{ escolas[spell.school] || spell.school }}
-      </v-card-subtitle>
 
-      <v-switch label="Conhece" inset color="red-darken-2" @click="onToggleKnown(spell.id)"></v-switch>
+      <v-row class="justify-space-between">
+
+        <v-col>
+
+          <v-card-title class="text-h5 font-weight-bold">
+            {{ spell.name }}
+          </v-card-title>
+          <v-card-subtitle class="text-capitalize pt-1">
+
+            {{ spell.level === 0 ? 'Truque' : `${spell.level}º Nível` }}
+            •
+            {{ escolas[spell.school] || spell.school }}
+            <p><strong v-if="spell.concentration">Concentração</strong></p>
+          </v-card-subtitle>
+        </v-col>
+
+        <v-col cols="3">
+
+
+
+          <v-switch
+label="Conhece" inset color="red-darken-2" :model-value="known"
+            @click="onToggleKnown(spell.id)"/>
+
+        </v-col>
+      </v-row>
     </v-card-item>
 
     <v-card-text>
-      <div :class="['spell-description text-body-2 mb-4', { 'two-columns': layout === 'full' }, 'markdown-body']"
-        v-html="md.render(spell.description)" />
-
-      <v-divider class="mb-4"></v-divider>
 
       <v-row density="comfortable" class="text-caption">
         <v-col cols="6" sm="4">
@@ -77,10 +98,20 @@ const md = new MarkdownIt({
         </v-col>
       </v-row>
 
+      <v-divider class="my-4"/>
+
+      <div
+:class="['spell-description text-body-2 mb-4', { 'two-columns': layout === 'full' }, 'markdown-body']"
+        v-html="md.render(spell.description)" />
+
+
+
+
       <div class="mt-4">
-        <span class="text-caption font-weight-bold">Componentes:</span>
+        <span v-if="spell.components.length > 0" class="text-caption font-weight-bold">Componentes:</span>
         <div class="d-flex align-center flex-wrap gap-1 mt-1">
-          <v-chip v-for="component in spell.components" :key="component" size="x-small" variant="tonal"
+          <v-chip
+v-for="component in spell.components" :key="component" size="x-small" variant="tonal"
             class="mr-1 font-weight-bold">
             {{ component.toUpperCase() }}
           </v-chip>
@@ -105,15 +136,18 @@ const md = new MarkdownIt({
 </template>
 
 <style scoped>
-/* 3. ESTILIZAÇÃO DO MARKDOWN (Tabelas e Listas) */
 .markdown-body {
   font-size: 0.95rem;
   line-height: 1.6;
 }
 
-/* Espaçamento de parágrafos e listas */
 .markdown-body :deep(p) {
   margin-bottom: 12px;
+}
+
+.markdown-body :deep(strong) {
+  margin-top: 20px;
+  display: block;
 }
 
 .markdown-body :deep(ul),
@@ -122,7 +156,6 @@ const md = new MarkdownIt({
   padding-left: 20px;
 }
 
-/* Estilização de Tabelas (padrão D&D) */
 .markdown-body :deep(table) {
   width: 100%;
   border-collapse: collapse;
@@ -132,7 +165,6 @@ const md = new MarkdownIt({
 
 .markdown-body :deep(th) {
   background-color: rgba(var(--v-theme-primary), 0.1);
-  /* Usa a cor primária do Vuetify */
   color: rgb(var(--v-theme-primary));
   font-weight: bold;
   text-align: left;
@@ -158,19 +190,19 @@ const md = new MarkdownIt({
 
 .v-card-spell {
   background-color: rgb(var(--v-theme-surface));
+  max-height: 700px;
 }
 
 .style-italic {
   font-style: italic;
 }
 
-/* Quando o card for largura total, divide a descrição em 2 colunas internas textuais */
 .two-columns {
   column-count: 2;
   column-gap: 24px;
+
 }
 
-/* Garante que tabelas e parágrafos não quebrem esquisito de uma coluna interna para a outra */
 .two-columns :deep(table),
 .two-columns :deep(p) {
   break-inside: avoid;
@@ -201,10 +233,10 @@ const md = new MarkdownIt({
   line-height: 1.5;
 }
 
-/* Remove colunas internas em telas pequenas de celular */
 @media (max-width: 600px) {
   .two-columns {
     column-count: 1;
+
   }
 }
 </style>

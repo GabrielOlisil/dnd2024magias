@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   ssr: true,
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['vuetify-nuxt-module'],
+  modules: ['vuetify-nuxt-module', '@nuxt/eslint'],
   vuetify: {
     moduleOptions: {
       /* module specific options */
@@ -12,8 +12,9 @@ export default defineNuxtConfig({
       /* vuetify options */
     }
   },
-  sitemap: {
-    zeroRuntime: true
+  nitro: {
+    preset: 'static',
+
   },
   app: {
     baseURL: '/',
@@ -33,4 +34,4 @@ export default defineNuxtConfig({
       ]
     }
   }
-})
+});
