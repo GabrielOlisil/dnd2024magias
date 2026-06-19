@@ -184,7 +184,6 @@ const md = new MarkdownIt({
 
 .v-card-spell {
   background-color: rgb(var(--v-theme-surface));
-  max-height: 700px;
 }
 
 .style-italic {
