@@ -3,15 +3,7 @@ export default defineNuxtConfig({
   ssr: true,
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['vuetify-nuxt-module', '@nuxt/eslint'],
-  vuetify: {
-    moduleOptions: {
-      /* module specific options */
-    },
-    vuetifyOptions: {
-      /* vuetify options */
-    }
-  },
+  modules: ['@nuxt/eslint'],
   nitro: {
     preset: 'static',
 
